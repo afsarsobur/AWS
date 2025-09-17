@@ -34,5 +34,5 @@ resource "aws_iam_user_policy_attachment" "attach_policy" {
 
 resource "aws_s3_bucket" "secure_customer_data" {
   bucket = "my-secure-customer-data-bucket"
-  aws_s3_bucket_acl    = "private"
+
 }
