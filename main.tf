@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "sensitive_data_bucket" {
 
 # Configure a lifecycle rule to transition objects to Glacier Deep Archive after 90 days
 resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
-  bucket = aws_s3_bucket.sensitive_data_bucket.id
+  bucket = aws_s3_bucket.sensitive_dyn-media-interview-task
   rule {
     id = "transition_to_glacier"
     status = "Enabled"
