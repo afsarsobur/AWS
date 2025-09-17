@@ -9,7 +9,7 @@ provider "aws" {
 resource "aws_s3_bucket" "sensitive_data_bucket" {
   bucket = "your-unique-sensitive-data-bucket-name123123213"  # Replace with a unique bucket name
 }
-}
+
 
 # Configure a lifecycle rule to transition objects to Glacier Deep Archive after 90 days
 resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
