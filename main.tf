@@ -16,6 +16,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
   rule {
     id = "transition_to_glacier"
     status = "Enabled"
+    
+    # Add an empty filter block to apply the rule to all objects
+    filter {}
+    
     transition {
       days          = 90
       storage_class = "GLACIER_DEEP_ARCHIVE"
