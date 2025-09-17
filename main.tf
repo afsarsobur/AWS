@@ -1,38 +1,25 @@
-resource "aws_iam_user" "readonly_user" {
-  name = "s3-readonly-user"
-  tags = {
-    "Project" = "S3-Security-Task"
+# main.tf
+
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1" 
+}
+
+# Create the S3 bucket
+resource "aws_s3_bucket" "sensitive_data_bucket" {
+  bucket = "dyn-media-int-task"  
+}
+}
+
+# Configure a lifecycle rule to transition objects to Glacier Deep Archive after 90 days
+resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
+  bucket = aws_s3_bucket.sensitive_data_bucket.id
+  rule {
+    id = "transition_to_glacier"
+    status = "Enabled"
+    transition {
+      days          = 90
+      storage_class = "GLACIER_DEEP_ARCHIVE"
+    }
   }
-}
-
-resource "aws_iam_policy" "s3_readonly_policy" {
-  name        = "s3-readonly-policy"
-  description = "Provides read-only access to a specific S3 bucket"
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:GetObject",
-          "s3:ListBucket"
-        ],
-        "Resource" : [
-          "arn:aws:s3:::my-secure-customer-data-bucket",
-          "arn:aws:s3:::my-secure-customer-data-bucket/*"
-        ]
-      }
-    ]
-  })
-}
-
-resource "aws_iam_user_policy_attachment" "attach_policy" {
-  user       = aws_iam_user.readonly_user.name
-  policy_arn = aws_iam_policy.s3_readonly_policy.arn
-}
-
-resource "aws_s3_bucket" "secure_customer_data" {
-  bucket = "my-secure-customer-data-bucket"
-
 }
