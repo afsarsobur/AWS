@@ -8,7 +8,7 @@ provider "aws" {
 # Create the S3 bucket
 resource "aws_s3_bucket" "sensitive_data_bucket" {
   bucket = "dyn-media-int-taskkk"
-
+}
 # Configure a lifecycle rule
 resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
   bucket = aws_s3_bucket.sensitive_data_bucket.id
