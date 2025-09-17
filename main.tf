@@ -7,7 +7,7 @@ provider "aws" {
 
 # Create the S3 bucket
 resource "aws_s3_bucket" "sensitive_data_bucket" {
-  bucket = "dyn-media-int-task"  
+  bucket = "dyn-media-interview-task"  
 }
 }
 
