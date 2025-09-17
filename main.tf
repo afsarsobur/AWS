@@ -1,22 +1,25 @@
-resource "aws_iam_policy" "s3_read_only" {
-  name        = "s3-read-only-access-policy"
-  description = "Provides read-only access to a specific S3 bucket"
+# main.tf
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowS3ReadOnly"
-        Effect = "Allow"
-        Action = [
-          "s3:GetObject",
-          "s3:ListBucket"
-        ]
-        Resource = [
-          "arn:aws:s3:::my-sensitive-data-bucket",
-          "arn:aws:s3:::my-sensitive-data-bucket/*"
-        ]
-      },
-    ]
-  })
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"  # Or your desired AWS region
+}
+
+# Create the S3 bucket
+resource "aws_s3_bucket" "sensitive_data_bucket" {
+  bucket = "your-unique-sensitive-data-bucket-name123123213"  # Replace with a unique bucket name
+}
+}
+
+# Configure a lifecycle rule to transition objects to Glacier Deep Archive after 90 days
+resource "aws_s3_bucket_lifecycle_configuration" "glacier_transition" {
+  bucket = aws_s3_bucket.sensitive_data_bucket.id
+  rule {
+    id = "transition_to_glacier"
+    status = "Enabled"
+    transition {
+      days          = 90
+      storage_class = "GLACIER_DEEP_ARCHIVE"
+    }
+  }
 }
